@@ -1322,6 +1322,14 @@ wordInput.addEventListener('change', async () => {
 
     docStatus.textContent = `เปิดไฟล์ "${file.name}" แล้ว — แก้ไขได้เลย`;
     docStatus.className = 'status ok';
+    // clear any leftover draft / recovery banner from before this file was
+    // opened -- otherwise the yellow "พบฉบับร่าง..." banner can stay stuck
+    // on screen on top of the freshly-opened document.
+    clearDraft();
+    const recoveryBannerEl = document.getElementById('recoveryBanner');
+    if(recoveryBannerEl) recoveryBannerEl.style.display = 'none';
+    updatePageCountBadge();
+    updateWordCountBadge();
   }catch(err){
     console.error(err);
     docStatus.textContent = 'เปิดไฟล์ไม่สำเร็จ: ' + err.message;
@@ -1444,7 +1452,12 @@ function tryOfferRecovery(){
   const when = new Date(draft.savedAt).toLocaleString('th-TH');
   text.textContent = `พบฉบับร่างที่บันทึกไว้อัตโนมัติเมื่อ ${when} ต้องการกู้คืนหรือไม่?`;
   banner.style.display = 'flex';
-  document.getElementById('recoveryRestoreBtn').addEventListener('click', () => {
+  // use direct onclick assignment (idempotent -- always overwrites the
+  // previous handler) instead of addEventListener(...{once:true}), which
+  // silently stops working if this function ever runs a second time
+  // (e.g. iOS Safari restoring the page from bfcache on back/forward nav)
+  // without a matching removeEventListener.
+  document.getElementById('recoveryRestoreBtn').onclick = () => {
     docPages.innerHTML = '';
     draft.pagesHtml.forEach(html => {
       const page = makePage();
@@ -1455,13 +1468,18 @@ function tryOfferRecovery(){
     reflow(lastActivePage);
     banner.style.display = 'none';
     docStatus.textContent = 'กู้คืนฉบับร่างล่าสุดแล้ว';
-  }, { once: true });
-  document.getElementById('recoveryDismissBtn').addEventListener('click', () => {
+  };
+  document.getElementById('recoveryDismissBtn').onclick = () => {
     clearDraft();
     banner.style.display = 'none';
-  }, { once: true });
+  };
 }
 tryOfferRecovery();
+// iOS Safari can restore a page from its bfcache (e.g. after switching tabs
+// or navigating back) without re-running scripts from scratch -- re-check
+// on 'pageshow' so the recovery banner and its buttons stay in sync with
+// localStorage instead of showing a stale, unresponsive state.
+window.addEventListener('pageshow', () => { tryOfferRecovery(); });
 updatePageScale();
 
 function downloadBytes(bytes, filename){
