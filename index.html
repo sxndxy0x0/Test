@@ -229,8 +229,11 @@
   /* docx-preview renders its own page(s) with correct size/margins already
      baked in from the file itself -- just center it and add the same page
      shadow our own blank pages use, don't fight its internal layout. */
-  .docx-host{display:flex;flex-direction:column;align-items:center;gap:24px;}
-  .docx-host .docx-wrapper{background:transparent !important;padding:0 !important;}
+  .docx-host{display:flex;flex-direction:column;align-items:center;}
+  .docx-host .docx-wrapper{
+    background:transparent !important;padding:0 !important;
+    display:flex;flex-direction:column;align-items:center;gap:28px;
+  }
   .docx-host section.docx{
     box-shadow:0 4px 18px rgba(0,0,0,.18);margin:0 !important;
     outline:none;
