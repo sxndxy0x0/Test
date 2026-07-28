@@ -1319,9 +1319,9 @@ function sourceSection(n){
 }
 function buildKnowledgeInquiryHTML(){
   return `
-    <div>ชื่อ สกุล<span style="display:inline-block;width:230px;border-bottom:1px dotted #000;">&nbsp;</span>
-    รหัสนักศึกษา<span style="display:inline-block;width:120px;border-bottom:1px dotted #000;">&nbsp;</span>
-    กลุ่มเรียนที่<span style="display:inline-block;width:90px;border-bottom:1px dotted #000;">&nbsp;</span></div>
+    <div style="white-space:nowrap;">ชื่อ สกุล<span style="display:inline-block;min-width:230px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span>
+    รหัสนักศึกษา<span style="display:inline-block;min-width:120px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span>
+    กลุ่มเรียนที่<span style="display:inline-block;min-width:90px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span></div>
 
     <p style="text-align:center;font-weight:bold;margin:18px 0;">กิจกรรมเดี่ยวที่ 1 การสืบค้นความรู้ (knowledge Inquiry)</p>
 
@@ -1427,8 +1427,6 @@ wordInput.addEventListener('change', async () => {
       // frame docx-preview drops (see .has-page-border CSS above)
     });
     lastActivePage = wrapper.querySelector('section.docx') || wrapper;
-
-    showDocxDebugPanel(wrapper);
 
     docStatus.textContent = `เปิดไฟล์ "${file.name}" แล้ว — แก้ไขได้เลย`;
     docStatus.className = 'status ok';
