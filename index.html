@@ -1301,7 +1301,10 @@ wordInput.addEventListener('change', async () => {
         // time it's opened/saved. Default is to ignore them (renders as one
         // continuous page); this turns that back on so multi-page docs
         // actually render as multiple pages.
-      experimental: true,      // better support for tabs, lists, and other layout features
+      experimental: false,     // 'experimental' handles tabs/lists via a beta
+        // renderer that has known bugs with numbered lists that restart
+        // partway through a doc (like this file's "แหล่งที่ 1/2/3" sections) --
+        // it can force runs to bold and miscount list numbers. Turned off.
       useBase64URL: true
     });
 
