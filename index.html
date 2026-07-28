@@ -240,8 +240,9 @@
   }
 
   .page-scroll{
-    overflow-x:auto;padding:32px 0;background:#C9C4B2;
+    overflow-x:auto;overflow-y:auto;padding:32px 0;background:#C9C4B2;
     border:1px solid var(--line);border-radius:6px 6px 0 0;
+    min-height:80vh;
   }
   .doc-toolbar-wrap{position:sticky;top:0;z-index:20;background:var(--paper);}
   .zoom-ctrl{display:flex;align-items:center;gap:4px;margin-left:auto;}
@@ -429,11 +430,11 @@
     </div>
   </section>
 
-  <section class="panel" id="panel-doc">
+  <section class="panel" id="panel-doc" style="max-width:1400px;margin:0 auto;padding-left:20px;padding-right:20px;">
     <h2>เอกสาร</h2>
     <p class="lead">พิมพ์งานได้เหมือนใน Word แล้วบันทึกเป็นไฟล์ .doc เปิดต่อใน Microsoft Word ได้ทันที — หรือเปิดไฟล์ Word เดิมมาแก้ต่อก็ได้</p>
 
-    <div class="toolbox">
+    <div class="toolbox" style="max-width:100%;">
       <h3>เอกสาร Word</h3>
       <div class="desc">พิมพ์ในกรอบด้านล่าง จัดรูปแบบด้วยแถบเครื่องมือ แล้วกด "บันทึกเป็นไฟล์ Word"</div>
 
