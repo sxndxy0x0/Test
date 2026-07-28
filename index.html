@@ -1232,6 +1232,43 @@ docPages.addEventListener('mouseup', () => { refreshToolbarState(); syncFontCont
 // open existing .docx via docx-preview (renders close to real Word layout:
 // alignment, borders, tab-stop leaders, tables, numbering, fonts, etc. are
 // all handled by the library itself instead of us re-deriving them by hand).
+
+// TEMPORARY DIAGNOSTIC PANEL: dumps what docx-preview actually produced
+// (page count, wrapper nesting, per-page height/overflow/margin) as plain
+// text right on the page, since iPad Safari has no easy devtools/console
+// access. Screenshot this panel and send it over if something still looks
+// wrong -- it pinpoints exactly which number is off instead of guessing.
+function showDocxDebugPanel(wrapper){
+  try{
+    const docxWrappers = Array.from(wrapper.querySelectorAll('.docx-wrapper'));
+    const pages = Array.from(wrapper.querySelectorAll('section.docx'));
+    const lines = [];
+    lines.push(`.docx-wrapper ที่เจอ: ${docxWrappers.length} ตัว`);
+    lines.push(`หน้า (section.docx) ที่เจอทั้งหมด: ${pages.length} หน้า`);
+    pages.forEach((p, i) => {
+      const cs = window.getComputedStyle(p);
+      const parent = p.parentElement;
+      lines.push(
+        `หน้า ${i+1}: สูง(กล่อง)=${p.offsetHeight}px, สูง(เนื้อหาจริง)=${p.scrollHeight}px, ` +
+        `margin-bottom=${cs.marginBottom}, parent=<${parent ? parent.tagName.toLowerCase() : '?'} class="${parent ? parent.className : ''}">`
+      );
+    });
+    let panel = document.getElementById('fdDocxDebugPanel');
+    if(!panel){
+      panel = document.createElement('pre');
+      panel.id = 'fdDocxDebugPanel';
+      panel.style.cssText = 'white-space:pre-wrap;font-family:monospace;font-size:12px;'
+        + 'background:#111;color:#0f0;padding:12px 16px;margin:0 0 20px;border-radius:6px;'
+        + 'max-width:794px;width:100%;box-sizing:border-box;';
+      docPages.parentElement.insertBefore(panel, docPages);
+    }
+    panel.textContent = '=== FreeDoc debug: docx-preview render info ===\n' + lines.join('\n');
+    console.log('[FreeDoc debug]', { docxWrapperCount: docxWrappers.length, pageCount: pages.length });
+  }catch(dbgErr){
+    console.warn('debug panel failed:', dbgErr);
+  }
+}
+
 const openWordBtn = document.getElementById('openWordBtn');
 const wordInput = document.getElementById('wordInput');
 openWordBtn.addEventListener('click', () => wordInput.click());
@@ -1269,6 +1306,8 @@ wordInput.addEventListener('change', async () => {
       // real docx-preview page (whose size already comes from the file itself).
     });
     lastActivePage = wrapper.querySelector('section.docx') || wrapper;
+
+    showDocxDebugPanel(wrapper);
 
     docStatus.textContent = `เปิดไฟล์ "${file.name}" แล้ว — แก้ไขได้เลย`;
     docStatus.className = 'status ok';
