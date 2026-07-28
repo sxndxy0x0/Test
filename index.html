@@ -567,6 +567,7 @@
         <button class="btn" id="saveWordBtn">บันทึกเป็นไฟล์ Word (.doc)</button>
         <button class="btn" id="exportPdfBtn" style="background:var(--teal);">แปลงเป็น PDF</button>
         <button class="btn ghost" id="openWordBtn">เปิดไฟล์ Word เดิม (.docx)</button>
+        <button class="btn ghost" id="loadKnowledgeInquiryBtn">โหลดแบบฟอร์ม "กิจกรรมเดี่ยวที่ 1" (แม่นยำ)</button>
         <button class="btn ghost" id="clearDocBtn">เริ่มเอกสารใหม่</button>
         <input type="file" id="wordInput" accept=".docx" style="display:none;">
       </div>
@@ -1280,6 +1281,83 @@ function showDocxDebugPanel(wrapper){
 }
 
 const openWordBtn = document.getElementById('openWordBtn');
+
+// ---- Hand-built exact template: "กิจกรรมเดี่ยวที่ 1 การสืบค้นความรู้" ----
+// Built directly as HTML instead of via docx-preview, so every bold/box/
+// blank-line matches the original Word file exactly -- we control every
+// element ourselves instead of relying on the (buggy) automatic converter.
+// Page breaks are handled by our own editor's normal auto-reflow, same as
+// any other page in this tool, so they land wherever the content naturally
+// fills a page -- this won't match Word's exact break points (no browser
+// can replicate Word's proprietary layout engine), but every visual detail
+// on each page (bold weight, box borders, spacing, blank-line count) does.
+function blankLines(n){
+  let out = '';
+  for(let i = 0; i < n; i++){
+    out += '<div style="border-bottom:1px dotted #000;height:1.9em;margin:0;">&nbsp;</div>';
+  }
+  return out;
+}
+function sourceBox(label){
+  return `<div style="border:1px solid #000;text-align:center;font-weight:bold;padding:4px 0;margin:14px 0 10px;">${label}</div>`;
+}
+function sourceSection(n){
+  return `
+    ${sourceBox('แหล่งที่ ' + n)}
+    <div>1)&nbsp; สืบค้นข้อมูลจากแหล่งใด/ชื่อหัวข้อ-ชื่อเรื่องอะไร (ระบุรายละเอียดพอเข้าใจ)</div>
+    ${blankLines(2)}
+    <div style="margin-top:10px;">2)&nbsp; เรียบเรียงข้อมูลที่ตนเองสนใจ ด้วยภาษาของตนเอง</div>
+    ${blankLines(6)}
+    <div style="margin-top:10px;">3)&nbsp; อ้างอิงของเรื่องที่สืบค้น (ระบุให้พอเข้าใจและสามารถสืบค้นเพื่อดูข้อมูลที่ค้นหาย้อนหลังได้)</div>
+    ${blankLines(2)}
+  `;
+}
+function buildKnowledgeInquiryHTML(){
+  return `
+    <div>ชื่อ สกุล<span style="display:inline-block;width:230px;border-bottom:1px dotted #000;">&nbsp;</span>
+    รหัสนักศึกษา<span style="display:inline-block;width:120px;border-bottom:1px dotted #000;">&nbsp;</span>
+    กลุ่มเรียนที่<span style="display:inline-block;width:90px;border-bottom:1px dotted #000;">&nbsp;</span></div>
+
+    <p style="text-align:center;font-weight:bold;margin:18px 0;">กิจกรรมเดี่ยวที่ 1 การสืบค้นความรู้ (knowledge Inquiry)</p>
+
+    <p style="font-weight:bold;margin:0 0 6px;">ให้เลือกประเด็นที่นักศึกษาสนใจและสืบค้นข้อมูลจากแหล่งข้อมูลต่างๆ (3 แหล่งที่ต่างกัน) เช่น Google search, OPAC, Online database, AI, ChatGPT, ข่าว, บทความวารสาร, หนังสือ, หรือจากที่แชร์กันในสื่อ Social media แล้วให้นักศึกษา</p>
+    <p style="margin:0 0 14px;">โดยเติมคำตอบในประเด็นต่อไปนี้</p>
+
+    <p style="font-weight:bold;margin:0 0 6px;">ชื่อเรื่อง/หัวข้อ/ประเด็น ที่สนใจสืบค้น (เรื่องเดียวกันทั้ง 3 แหล่ง)</p>
+    ${blankLines(2)}
+
+    <p style="font-weight:bold;margin:14px 0 4px;">1. สรุปความเนื้อหาสาระสำคัญ สั้นๆ ด้วยการเรียบเรียงของ นศ. เอง</p>
+
+    ${sourceSection(1)}
+    ${sourceSection(2)}
+    ${sourceSection(3)}
+
+    <p style="font-weight:bold;margin:14px 0 4px;">2. "วิเคราะห์+สรุป" ว่า ทั้ง 3 แหล่งข้อมูล สอดคล้อง/สนับสนุน/ขัดแย้งกัน ประเด็นไหนอย่างไรบ้าง</p>
+    ${blankLines(10)}
+
+    <p style="font-weight:bold;margin:14px 0 4px;">3. นศ. คิดว่า สื่อไหน (แหล่งข้อมูลใดที่สืบค้นมา) น่าเชื่อถือที่สุด/เพราะอะไร</p>
+    ${blankLines(20)}
+  `;
+}
+const loadKnowledgeInquiryBtn = document.getElementById('loadKnowledgeInquiryBtn');
+if(loadKnowledgeInquiryBtn){
+  loadKnowledgeInquiryBtn.addEventListener('click', () => {
+    docPages.innerHTML = '';
+    const page = makePage();
+    page.innerHTML = buildKnowledgeInquiryHTML();
+    docPages.appendChild(page);
+    lastActivePage = page;
+    reflow(page); // splits into further real pages automatically, same as typing would
+    clearDraft();
+    const recoveryBannerEl = document.getElementById('recoveryBanner');
+    if(recoveryBannerEl) recoveryBannerEl.style.display = 'none';
+    updatePageCountBadge();
+    updateWordCountBadge();
+    updatePageScale();
+    docStatus.textContent = 'โหลดแบบฟอร์ม "กิจกรรมเดี่ยวที่ 1" แล้ว — แก้ไขได้เลย';
+    docStatus.className = 'status ok';
+  });
+}
 const wordInput = document.getElementById('wordInput');
 openWordBtn.addEventListener('click', () => wordInput.click());
 wordInput.addEventListener('change', async () => {
