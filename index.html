@@ -237,6 +237,15 @@
   .docx-host section.docx{
     box-shadow:0 4px 18px rgba(0,0,0,.18);margin:0 !important;
     outline:none;
+    position:relative;
+  }
+  /* docx-preview doesn't render Word's page-border setting (sectPr/pgBorders),
+     so the original file's double-line frame around each page is missing.
+     Recreate it here purely visually -- toggle .has-page-border on/off per
+     document if some imported files shouldn't have it. */
+  .docx-host section.docx.has-page-border::before{
+    content:'';position:absolute;inset:28px;border:3px double #000;
+    pointer-events:none;
   }
 
   .page-scroll{
@@ -1308,6 +1317,21 @@ wordInput.addEventListener('change', async () => {
       useBase64URL: true
     });
 
+    // docx-preview sometimes splits a bordered paragraph (this file's boxed
+    // "แหล่งที่ 1/2/3" headings) across a page break: it leaves an empty
+    // border-only shell at the bottom of the earlier page, then renders the
+    // real boxed text again at the top of the next page. Clean up those
+    // empty leftover shells so the page doesn't show an orphan blank box.
+    wrapper.querySelectorAll('.docx-wrapper section.docx *').forEach(el => {
+      if(el.children.length > 0) return; // only leaf elements
+      const txt = (el.textContent || '').replace(/\s|\u200b/g, '');
+      if(txt.length > 0) return; // has real content, leave it alone
+      const cs = window.getComputedStyle(el);
+      const hasBorder = ['Top','Right','Bottom','Left'].some(side =>
+        cs[`border${side}Width`] !== '0px' && cs[`border${side}Style`] !== 'none');
+      if(hasBorder) el.remove();
+    });
+
     // Let the person keep editing the text in place, same as our own pages.
     wrapper.querySelectorAll('.docx-wrapper > section.docx').forEach(pageEl => {
       pageEl.contentEditable = 'true';
@@ -1315,6 +1339,8 @@ wordInput.addEventListener('change', async () => {
       // fixed-size/auto-reflow pagination system, which is only meant for the
       // blank pages we create ourselves and would otherwise clip/scramble a
       // real docx-preview page (whose size already comes from the file itself).
+      pageEl.classList.add('has-page-border'); // restore the double-line page
+      // frame docx-preview drops (see .has-page-border CSS above)
     });
     lastActivePage = wrapper.querySelector('section.docx') || wrapper;
 
