@@ -1293,6 +1293,13 @@ wordInput.addEventListener('change', async () => {
       ignoreWidth: false,
       ignoreHeight: false,
       breakPages: true,        // one real page per Word page, like Word itself
+      ignoreLastRenderedPageBreak: false, // IMPORTANT: docx-preview does not
+        // reflow/paginate by content height like a real word processor -- it
+        // only splits pages at breaks already recorded in the file. Word
+        // stamps these "lastRenderedPageBreak" markers into the file each
+        // time it's opened/saved. Default is to ignore them (renders as one
+        // continuous page); this turns that back on so multi-page docs
+        // actually render as multiple pages.
       experimental: true,      // better support for tabs, lists, and other layout features
       useBase64URL: true
     });
