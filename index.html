@@ -287,10 +287,16 @@
   mark.fd-hit{background:#fff176;}
   mark.fd-hit.current{background:#ffb74d;}
   @media print{
+    @page{ size: 210mm 297mm; margin: 0; }
+    html, body{ margin:0 !important; padding:0 !important; }
     body *{visibility:hidden;}
     #docPages, #docPages *{visibility:visible;}
-    #docPages{position:absolute;left:0;top:0;transform:none !important;}
-    .doc-page{box-shadow:none;border:none;margin:0;page-break-after:always;}
+    #docPages{position:absolute;left:0;top:0;transform:none !important;width:auto !important;}
+    .doc-page{
+      box-shadow:none;border:none;margin:0 !important;
+      page-break-after:always;page-break-inside:avoid;
+      width:210mm !important;height:297mm !important;
+    }
   }
   #docPages{width:fit-content;margin:0 auto;}
   .doc-page{
