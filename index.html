@@ -253,7 +253,7 @@
     content:'';position:absolute;inset:28px;border:3px double #000;
     pointer-events:none;
   }
-  #docPages.tight-lines .doc-page{ line-height:1.48; font-size:16pt; font-family:'Sarabun',sans-serif; }
+  #docPages.tight-lines .doc-page{ line-height:1.5; font-size:16pt; font-family:'TH SarabunPSK','Sarabun',sans-serif; }
 
   .page-scroll{
     overflow-x:auto;overflow-y:auto;padding:32px 0;background:#C9C4B2;
@@ -1319,7 +1319,7 @@ const openWordBtn = document.getElementById('openWordBtn');
 function blankLines(n){
   let out = '';
   for(let i = 0; i < n; i++){
-    out += '<div style="border-bottom:1px dotted #000;height:1.6em;margin:0;">&nbsp;</div>';
+    out += '<div style="border-bottom:1px dotted #000;height:1.65em;margin:0;">&nbsp;</div>';
   }
   return out;
 }
@@ -1381,7 +1381,7 @@ if(loadKnowledgeInquiryBtn){
     // depending on network speed/cache state each time this button is pressed.
     try{
       await Promise.race([
-        document.fonts.load('16pt "Sarabun"').then(() => document.fonts.ready),
+        document.fonts.load('16pt "TH SarabunPSK"').then(() => document.fonts.ready),
         new Promise(resolve => setTimeout(resolve, 2000)) // don't hang forever if the font CDN is blocked
       ]);
     }catch(e){ /* font API unsupported or failed — proceed with whatever is loaded */ }
