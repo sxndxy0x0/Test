@@ -6,6 +6,10 @@
 <title>FreeDoc — เครื่องมือเอกสารฟรี ไม่ต้องอัปโหลด</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Taviraj:wght@600;700&family=Kanit:wght@400;600;700&family=Mitr:wght@400;600&family=Prompt:wght@400;600&family=IBM+Plex+Sans+Thai:wght@400;600&family=Chonburi&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/th-sarabunpsk" rel="stylesheet">
+<!-- ^ the exact font the original Word file for "กิจกรรมเดี่ยวที่ 1" uses (TH SarabunPSK),
+     used only for that hand-built template so its sizing matches the original pixel-for-pixel;
+     the rest of the app keeps using Google's Sarabun (TH Sarabun New). -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://unpkg.com/docx-preview@0.4.0/dist/docx-preview.min.js"></script>
@@ -249,7 +253,7 @@
     content:'';position:absolute;inset:28px;border:3px double #000;
     pointer-events:none;
   }
-  #docPages.tight-lines .doc-page{ line-height:1.4; }
+  #docPages.tight-lines .doc-page{ line-height:1.4; font-size:16pt; font-family:'TH SarabunPSK','Sarabun',sans-serif; }
 
   .page-scroll{
     overflow-x:auto;overflow-y:auto;padding:32px 0;background:#C9C4B2;
