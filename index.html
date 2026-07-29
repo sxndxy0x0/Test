@@ -1366,7 +1366,7 @@ function buildKnowledgeInquiryHTML(){
 }
 const loadKnowledgeInquiryBtn = document.getElementById('loadKnowledgeInquiryBtn');
 if(loadKnowledgeInquiryBtn){
-  loadKnowledgeInquiryBtn.addEventListener('click', () => {
+  loadKnowledgeInquiryBtn.addEventListener('click', async () => {
     docPages.innerHTML = '';
     docPages.classList.add('with-page-border');
     docPages.classList.add('tight-lines');
@@ -1374,6 +1374,17 @@ if(loadKnowledgeInquiryBtn){
     page.innerHTML = buildKnowledgeInquiryHTML();
     docPages.appendChild(page);
     lastActivePage = page;
+    docStatus.textContent = 'กำลังโหลดฟอนต์...';
+    // Force the exact font to load and apply BEFORE measuring page heights --
+    // otherwise reflow() runs against a fallback font's line metrics (whichever
+    // font hadn't finished downloading yet), and pagination silently drifts
+    // depending on network speed/cache state each time this button is pressed.
+    try{
+      await Promise.race([
+        document.fonts.load('16pt "TH SarabunPSK"').then(() => document.fonts.ready),
+        new Promise(resolve => setTimeout(resolve, 2000)) // don't hang forever if the font CDN is blocked
+      ]);
+    }catch(e){ /* font API unsupported or failed — proceed with whatever is loaded */ }
     reflow(page); // splits into further real pages automatically, same as typing would
     clearDraft();
     const recoveryBannerEl = document.getElementById('recoveryBanner');
