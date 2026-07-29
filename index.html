@@ -1299,7 +1299,7 @@ const openWordBtn = document.getElementById('openWordBtn');
 function blankLines(n){
   let out = '';
   for(let i = 0; i < n; i++){
-    out += '<div style="border-bottom:1px dotted #000;height:1.9em;margin:0;">&nbsp;</div>';
+    out += '<div style="border-bottom:1px dotted #000;height:1.5em;margin:0;">&nbsp;</div>';
   }
   return out;
 }
@@ -1319,29 +1319,31 @@ function sourceSection(n){
 }
 function buildKnowledgeInquiryHTML(){
   return `
-    <div style="white-space:nowrap;">ชื่อ สกุล<span style="display:inline-block;min-width:230px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span>
-    รหัสนักศึกษา<span style="display:inline-block;min-width:120px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span>
-    กลุ่มเรียนที่<span style="display:inline-block;min-width:90px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span></div>
+    <div style="line-height:1.4;">
+    <div>ชื่อ สกุล<span style="display:inline-block;min-width:210px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span>
+    รหัสนักศึกษา<span style="display:inline-block;min-width:110px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span>
+    กลุ่มเรียนที่<span style="display:inline-block;min-width:80px;border-bottom:1px dotted #000;white-space:nowrap;">&nbsp;</span></div>
 
-    <p style="text-align:center;font-weight:bold;margin:18px 0;">กิจกรรมเดี่ยวที่ 1 การสืบค้นความรู้ (knowledge Inquiry)</p>
+    <p style="text-align:center;font-weight:bold;margin:14px 0;">กิจกรรมเดี่ยวที่ 1 การสืบค้นความรู้ (knowledge Inquiry)</p>
 
-    <p style="font-weight:bold;margin:0 0 6px;">ให้เลือกประเด็นที่นักศึกษาสนใจและสืบค้นข้อมูลจากแหล่งข้อมูลต่างๆ (3 แหล่งที่ต่างกัน) เช่น Google search, OPAC, Online database, AI, ChatGPT, ข่าว, บทความวารสาร, หนังสือ, หรือจากที่แชร์กันในสื่อ Social media แล้วให้นักศึกษา</p>
-    <p style="margin:0 0 14px;">โดยเติมคำตอบในประเด็นต่อไปนี้</p>
+    <p style="font-weight:bold;margin:0 0 4px;">ให้เลือกประเด็นที่นักศึกษาสนใจและสืบค้นข้อมูลจากแหล่งข้อมูลต่างๆ (3 แหล่งที่ต่างกัน) เช่น Google search, OPAC, Online database, AI, ChatGPT, ข่าว, บทความวารสาร, หนังสือ, หรือจากที่แชร์กันในสื่อ Social media แล้วให้นักศึกษา</p>
+    <p style="margin:0 0 10px;">โดยเติมคำตอบในประเด็นต่อไปนี้</p>
 
-    <p style="font-weight:bold;margin:0 0 6px;">ชื่อเรื่อง/หัวข้อ/ประเด็น ที่สนใจสืบค้น (เรื่องเดียวกันทั้ง 3 แหล่ง)</p>
+    <p style="font-weight:bold;margin:0 0 4px;">ชื่อเรื่อง/หัวข้อ/ประเด็น ที่สนใจสืบค้น (เรื่องเดียวกันทั้ง 3 แหล่ง)</p>
     ${blankLines(2)}
 
-    <p style="font-weight:bold;margin:14px 0 4px;">1. สรุปความเนื้อหาสาระสำคัญ สั้นๆ ด้วยการเรียบเรียงของ นศ. เอง</p>
+    <p style="font-weight:bold;margin:10px 0 3px;">1. สรุปความเนื้อหาสาระสำคัญ สั้นๆ ด้วยการเรียบเรียงของ นศ. เอง</p>
 
     ${sourceSection(1)}
     ${sourceSection(2)}
     ${sourceSection(3)}
 
-    <p style="font-weight:bold;margin:14px 0 4px;">2. "วิเคราะห์+สรุป" ว่า ทั้ง 3 แหล่งข้อมูล สอดคล้อง/สนับสนุน/ขัดแย้งกัน ประเด็นไหนอย่างไรบ้าง</p>
+    <p style="font-weight:bold;margin:10px 0 3px;">2. "วิเคราะห์+สรุป" ว่า ทั้ง 3 แหล่งข้อมูล สอดคล้อง/สนับสนุน/ขัดแย้งกัน ประเด็นไหนอย่างไรบ้าง</p>
     ${blankLines(10)}
 
-    <p style="font-weight:bold;margin:14px 0 4px;">3. นศ. คิดว่า สื่อไหน (แหล่งข้อมูลใดที่สืบค้นมา) น่าเชื่อถือที่สุด/เพราะอะไร</p>
+    <p style="font-weight:bold;margin:10px 0 3px;">3. นศ. คิดว่า สื่อไหน (แหล่งข้อมูลใดที่สืบค้นมา) น่าเชื่อถือที่สุด/เพราะอะไร</p>
     ${blankLines(20)}
+    </div>
   `;
 }
 const loadKnowledgeInquiryBtn = document.getElementById('loadKnowledgeInquiryBtn');
